@@ -1,3 +1,5 @@
+import { ResultOperation } from "./getToken";
+
 export type PointsData = {
   currentQuantity: number;
   dateBurning: string;
@@ -5,14 +7,7 @@ export type PointsData = {
   typeBonusName: string;
 };
 export type PointsResponse = {
-  resultOperation: {
-    status: 1 | 2 | 3;
-    message: string;
-    messageDev: string;
-    codeResult: number;
-    duration: number;
-    idLog: string;
-  };
+  resultOperation: ResultOperation;
   data: PointsData;
 };
 
@@ -33,5 +28,9 @@ export const getPointsData = async (token: string) => {
   );
 
   const data: PointsResponse = await response.json();
+
+  if (data.resultOperation.codeResult !== 0) {
+    throw new Error("Что-то пошло не так");
+  }
   return data;
 };

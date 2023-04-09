@@ -1,12 +1,13 @@
+export type ResultOperation = {
+  status: number;
+  message: string;
+  messageDev: string;
+  codeResult: number;
+  duration: number;
+  idLog: string;
+};
 export type TokenResponse = {
-  result: {
-    status: 1 | 2 | 3;
-    message: string;
-    messageDev: string;
-    codeResult: number;
-    duration: number;
-    idLog: string;
-  };
+  result: ResultOperation;
   accessToken: string;
 };
 
@@ -35,5 +36,9 @@ export const getToken = async () => {
   );
 
   const data: TokenResponse = await response.json();
+
+  if (data.result.status !== 0) {
+    throw new Error("Что-то пошло не так");
+  }
   return data;
 };

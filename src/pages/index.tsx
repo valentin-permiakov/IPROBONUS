@@ -5,6 +5,8 @@ import { getToken } from "@/utils/getToken";
 import { PointsData, getPointsData } from "@/utils/getPointsData";
 import Header from "@/components/Header/Header";
 import BonusContainer from "@/components/BonusContainer/BonusContainer";
+import Container from "@/components/Container/Container";
+import Head from "next/head";
 
 const Home: React.FC = () => {
   const [token, setToken] = useState("");
@@ -17,7 +19,6 @@ const Home: React.FC = () => {
       setError("");
       try {
         const data = await getToken();
-
         setToken(data.accessToken);
       } catch (error: any) {
         console.log(error.message);
@@ -30,29 +31,40 @@ const Home: React.FC = () => {
   useEffect(() => {
     async function loadData() {
       if (token) {
-        const pointsResponse = await getPointsData(token);
-        setBonusData(pointsResponse.data);
-        setLoading(false);
+        try {
+          const pointsResponse = await getPointsData(token);
+          setBonusData(pointsResponse.data);
+          setLoading(false);
+        } catch (error: any) {
+          console.log(error.message);
+          setError(error.message);
+        }
       }
     }
     loadData();
   }, [token]);
 
   return (
-    <div className={styles.main}>
-      {error && <div>{error}</div>}
-      <h1 className={styles.header}>IPROBONUS</h1>
-      <Header />
-      {loading && <span>loading...</span>}
-      {bonusData && (
-        <BonusContainer
-          currentQuantity={bonusData.currentQuantity}
-          dateBurning={bonusData.dateBurning}
-          forBurningQuantity={bonusData.forBurningQuantity}
-          typeBonusName={bonusData.typeBonusName}
-        />
-      )}
-    </div>
+    <>
+      <Head>
+        <title>IPROBONUS</title>
+      </Head>
+      <div className={styles.main}>
+        <Header />
+        {error && <Container>{error}</Container>}
+        {!error && loading && <Container>Загружаем данные...</Container>}
+        {bonusData && (
+          <Container>
+            <BonusContainer
+              currentQuantity={bonusData.currentQuantity}
+              dateBurning={bonusData.dateBurning}
+              forBurningQuantity={bonusData.forBurningQuantity}
+              typeBonusName={bonusData.typeBonusName}
+            />
+          </Container>
+        )}
+      </div>
+    </>
   );
 };
 

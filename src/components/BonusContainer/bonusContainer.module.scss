@@ -1,0 +1,21 @@
+@use "@/styles/mixins";
+@use "@/styles/variables" as vars;
+
+.quantity {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+}
+
+.infoBtn {
+  @include mixins.btnReset;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+
+  &:hover {
+    outline: 2px solid vars.$mainRed;
+  }
+}

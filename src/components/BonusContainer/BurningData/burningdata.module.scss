@@ -1,0 +1,13 @@
+@use "@/styles/variables" as vars;
+
+.burnContainer {
+  color: vars.$textLight;
+
+  .date {
+    margin-right: 8px;
+  }
+
+  svg {
+    margin-right: 8px;
+  }
+}
